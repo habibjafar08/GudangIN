@@ -1,4 +1,4 @@
-![Header](./docs/GudangIn.png)
+![Header](GudangIn.png)
 
 ## ABOUT
 
