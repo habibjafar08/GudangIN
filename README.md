@@ -21,11 +21,11 @@ https://github.com/habibjafar08/GudangIN.git
 ## PROJECT ORGANIZATION
 
 Strutur dari Aplikasi gudang sebagai berikut:
+
 ├── README.md <- Menampilkan mengenai fitur dan kegunaan dari program.
 │
 ├── docs <- dokumen berisi presentasi dari produk.
 │
 ├── src <- Source code pada program.
 │
-└── requirements.txt <- The requirements file untuk memproduksi analysis environment, e.g.
-generated with `pipreqs > requirements.txt`
+└── requirements.txt <- The requirements file untuk memproduksi analysis environment, e.g. generated with `pipreqs > requirements.txt`
