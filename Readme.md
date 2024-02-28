@@ -18,13 +18,14 @@ default password: "admin123"
 Untuk mendapatkan aplikasi ini ,kamu dpat mengcloning dengan code berikut:
 https://github.com/habibjafar08/GudangIN.git
 
-#PROJECT ORGANIZATION
+## PROJECT ORGANIZATION
+
 Strutur dari Aplikasi gudang sebagai berikut:
-├── README.md <- The top-level README for developers using this project.
+├── README.md <- Menampilkan mengenai fitur dan kegunaan dari program.
 │
-├── docs <- The document will consist of a detailed presentation or images.
+├── docs <- dokumen berisi presentasi dari produk.
 │
-├── src <- Source code for use in this project.
+├── src <- Source code pada program.
 │
-└── requirements.txt <- The requirements file for reproducing the analysis environment, e.g.
+└── requirements.txt <- The requirements file untuk memproduksi analysis environment, e.g.
 generated with `pipreqs > requirements.txt`

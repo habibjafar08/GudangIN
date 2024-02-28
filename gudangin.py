@@ -12,6 +12,30 @@ HEADERS=("id","Sparepart","Kenadaraan","Stock","Merk","Jenis")
 def show(table, headers=HEADERS, title='\nTabel Daftar Barang\n'):
     print(title)
     print(tabulate(table, headers,tablefmt="grid"))
+
+
+#Validasi
+def validasi(promp):
+    while True:
+        Minput=input(promp)
+        if Minput.isalnum():
+            break
+        else:
+            print("Jangan Masukkan karakter!!")
+    return Minput
+
+#validasi string
+def string(promp):
+    while True:
+        val=input(promp)
+        if val.isalpha() or val.replace(' ','').isalpha():
+            break
+        else:
+            print("Masukkan Huruf Saja !!")
+
+    return val
+
+
 #read data
 def read_data():
     while True:
@@ -24,19 +48,25 @@ def read_data():
         option_sub=input("masukkan 1-3: ")
         #untuk menampilkan semua barang yang ada
         if option_sub=="1":
-            show(database)
+            if database==[]:
+                print("Database Kosong")
+            else:
+                show(database)
             continue
         #untuk pencarian barang berdasarkan id barang
         elif option_sub=='2':
-            id_tertentu=input("masukkan id barang: ")
-            for i,item in enumerate(database):
-                if id_tertentu.upper()==item[0]:
-                    item1=[item]
-                    print(tabulate(item1,HEADERS,tablefmt="grid"))
-                    break
+            if database==[]:
+                print("Database Kosong,sehingga tidak dapat dilakukan pencarian produk")
             else:
-                print("ID Barang Tidak Tersedia")
-                continue
+                id_tertentu=input("masukkan id barang: ")
+                for i,item in enumerate(database):
+                    if id_tertentu.upper()==item[0]:
+                        item1=[item]
+                        print(tabulate(item1,HEADERS,tablefmt="grid"))
+                        break
+                else:
+                    print("ID Barang Tidak Tersedia")
+                    continue
         #Masuk ke main menu
         elif option_sub=='3':
             break
@@ -59,15 +89,23 @@ def tambah(table):
         #jika kita memasukkan kode barang yang sudah ada maka barang tidak akan ditambahkan
         if option_sub=="1":
             while True:
-                id=input("Masukan id: ")
+                id=validasi("Masukkan ID Barang: ")
                 for i,item in enumerate(table):
                     if id.upper() == item[0]:
                         print("Id sudah terdaftar")
                         break
-                    
             #untuk memasukkan input barang baru         
                 else:
-                    sparepart=input("Masukan Nama Sparepart: ")
+                    while True:
+                        sparepart=string("Masukkan jenis sprepart: ")
+                        jenis=string("Masukkan jenis kendaraan: ")
+                        merk=string("Masukkan merk kendaraan: ")
+                        for i,item in enumerate(table):
+                            if sparepart.title()== item[1] and jenis.title()==item[5] and merk.title()==item[4]:
+                                print("Jenis sparepart untuk kendaraan dan tipe tersebut sudah terdaftar")
+                                break
+                        else:
+                            break
                     while True:
                         kendaraan=input("Masukkan Jenis Kendaraan Mobil/Motor: ")
                         if kendaraan.upper()=='MOTOR' or kendaraan.upper()=='MOBIL':
@@ -81,10 +119,8 @@ def tambah(table):
                         else:
                             print("Masukkan stock dalam angka!")
                             continue
-
-                    merk=input("Masukkan Merk Kendaraan: ")
-                    Jenis=input("Masukkan Jenis Kendaraan: ")
-                    tampilkan=[[id.upper(),sparepart.capitalize(),kendaraan.capitalize(),stock.capitalize(),merk.capitalize(),Jenis.capitalize()]]
+                        
+                    tampilkan=[[id.upper(),sparepart.title(),kendaraan.capitalize(),int(stock),merk.title(),jenis.title()]]
                     show(tampilkan)
                     while True:
                         print("Apakah anda ingin menambahkan produk tersebut?(Y/N)")
@@ -92,11 +128,11 @@ def tambah(table):
                         if konfirInput.upper()=="Y":
                             table.append([
                                 id.upper(),
-                                sparepart.capitalize(),
+                                sparepart.title(),
                                 kendaraan.capitalize(),
-                                int(stock.capitalize()),
-                                merk.capitalize(),
-                                Jenis.capitalize()
+                                int(stock),
+                                merk.title(),
+                                jenis.title()
                             ])
                             show(table)
                             print("Barang Berhasil Di Input")
@@ -126,86 +162,87 @@ def update(table):
         3. main menu""")
         #memasukkan input sub menu update
         option_sub= input("Masukkan menu yang dipilih: ")
-        if option_sub=='1':   
-        #untuk menambhkan stock barang 
-            while True: 
-                id=input("Masukkan ID Barang: ")  
-                for i,item in enumerate(database):
-                    if id.upper()==item[0]:
-                        break
-                else:
-                    print("ID Barang Tidak Terdaftar")
-                    continue
-                        
-
-                while True:
-                    stock=input("Masukkan Stock Barang: ")
-                    if stock.isdecimal()==True:
-                        break
+        if option_sub=='1':
+            if database==[]:
+                print("Database kosong sehingga tidak bisa dilakukan update!") 
+            else:  
+                while True: 
+                    id=input("Masukkan ID Barang: ")  
+                    for i,item in enumerate(database):
+                        if id.upper()==item[0]:
+                            break
                     else:
-                        print("Masukkan Stock Dalam Angka")
+                        print("ID Barang Tidak Terdaftar")
                         continue
-                
-                tampilUpStock=[[id.upper(),item[1],item[2],stock,item[4],item[5]]]
-                show(tampilUpStock)
-                while True:
-                    print("Apakah anda ingin menambahkan stock produk tersebut?(Y/N)")
-                    konfirInput=input("Y/N: ")
-                    if konfirInput.upper()=="Y":
-                        item[3]+=int(stock)
-                        show(table)
-                        print("Stock Barang Berhasil Ditambahkan")
-                        break
-                    elif konfirInput.upper()=="N":
-                        print("Stock produk tidak ditambahkan")  
-                        break     
-                    else:
-                        print("Inputkan Y/N!")
-                        continue
-                break
+                    while True:
+                        stock=input("Masukkan Stock Barang: ")
+                        if stock.isdecimal()==True:
+                            break
+                        else:
+                            print("Masukkan Stock Dalam Angka")
+                            continue
+                    
+                    tampilUpStock=[[id.upper(),item[1],item[2],stock,item[4],item[5]]]
+                    show(tampilUpStock)
+                    while True:
+                        print("Apakah anda ingin menambahkan stock produk tersebut?(Y/N)")
+                        konfirInput=input("Y/N: ")
+                        if konfirInput.upper()=="Y":
+                            item[3]+=int(stock)
+                            show(table)
+                            print("Stock Barang Berhasil Ditambahkan")
+                            break
+                        elif konfirInput.upper()=="N":
+                            print("Stock produk tidak ditambahkan")  
+                            break     
+                        else:
+                            print("Inputkan Y/N!")
+                            continue
+                    break
         
         #Update stock barang keluar        
         elif option_sub=='2':
-            while True:
-                id=input("Masukkan ID Barang: ")
-                for i,item in enumerate(database):
-                    if id.upper()==item[0]:
-                        break
-                else:
-                    print("ID Barang Tidak Tersedia")
-                    continue
-
-                while True:    
-                    stock=input("Masukkan jumlah barang keluar: ")
-                    if stock.isdecimal()==True:
-                        if int(stock)<=item[3]:
-                            break
-                        else:
-                            print("Barang yang dimasukkan melebihi stock!")
-                            continue
-                    else:
-                        print("Masukkan Stock Dalam Angka")
-                        continue
-                
-                tampilKurang=[[id.upper(),item[1],item[2],stock,item[4],item[5]]]
-                show(tampilKurang)
+            if database==[]:
+                print("Database kosong sehingga tidak bisa mengeluarkan barang!!")
+            else:
                 while True:
-                    print("Apakah benar produk tersebut dan quantitynya yang akan keluar?(Y/N)")
-                    konfirInput=input("Y/N: ")
-                    if konfirInput.upper()=="Y":
-                        item[3]-=int(stock)
-                        show(table)
-                        break
-                    elif konfirInput.upper()=="N":
-                        print("Batal")  
-                        break     
+                    id=input("Masukkan ID Barang: ")
+                    for i,item in enumerate(database):
+                        if id.upper()==item[0]:
+                            break
                     else:
-                        print("Inputkan Y/N!")
-                    continue
-                break
-                
-        
-                
+                        print("ID Barang Tidak Tersedia")
+                        continue
+
+                    while True:    
+                        stock=input("Masukkan jumlah barang keluar: ")
+                        if stock.isdecimal()==True:
+                            if int(stock)<=item[3]:
+                                break
+                            else:
+                                print("Barang yang dimasukkan melebihi stock!")
+                                continue
+                        else:
+                            print("Masukkan Stock Dalam Angka")
+                            continue
+                    
+                    tampilKurang=[[id.upper(),item[1],item[2],stock,item[4],item[5]]]
+                    show(tampilKurang)
+                    while True:
+                        print("Apakah benar produk tersebut dan quantitynya yang akan keluar?(Y/N)")
+                        konfirInput=input("Y/N: ")
+                        if konfirInput.upper()=="Y":
+                            item[3]-=int(stock)
+                            show(table)
+                            break
+                        elif konfirInput.upper()=="N":
+                            print("Batal")  
+                            break     
+                        else:
+                            print("Inputkan Y/N!")
+                        continue
+                    break
+                 
     #Masuk Main menu
         elif option_sub=='3':
             break
@@ -224,36 +261,36 @@ def delete(table):
         """)
         option_sub=input("Masukkan nomer yang dipilih 1/2: ")
         if option_sub=='1':
-            show(table)
-            while True:
-                id=input("Masukkan ID barang yang akan dihapus: ")
-                for i,item in enumerate(database):
-                    if id.upper()==item[0]:
-                        break
-                else:
-                    print("ID Tidak Terdaftar")
-                    continue
-
-                tampilDel=[[id.upper(),item[1],item[2],item[3],item[4]]]
-                show(tampilDel)
+            if database==[]:
+                print("Database kosong sehingga tidak ada barang yang dihapus!!")
+            else:
+                show(table)
                 while True:
-                    print("Apakah anda yakin akan menghapus?")
-                    konfir=input("Masukkan Y/N: ")
-                    if konfir.upper()=='Y':
-                        del table[i]
-                        show(table)
-                        print("Barang Berhasil Dihapus!")
-                        break
-                    elif konfir.upper()=='N':
-                        print("barang tidak dihapus")
-                        break
+                    id=input("Masukkan ID barang yang akan dihapus: ")
+                    for i,item in enumerate(database):
+                        if id.upper()==item[0]:
+                            break
                     else:
-                        print("Masukkan Y/N!")
-                        continue 
-                break 
-                
-        
-            
+                        print("ID Tidak Terdaftar")
+                        continue
+
+                    tampilDel=[[id.upper(),item[1],item[2],item[3],item[4]]]
+                    show(tampilDel)
+                    while True:
+                        print("Apakah anda yakin akan menghapus?")
+                        konfir=input("Masukkan Y/N: ")
+                        if konfir.upper()=='Y':
+                            del table[i]
+                            show(table)
+                            print("Barang Berhasil Dihapus!")
+                            break
+                        elif konfir.upper()=='N':
+                            print("barang tidak dihapus")
+                            break
+                        else:
+                            print("Masukkan Y/N!")
+                            continue 
+                    break 
         elif option_sub=='2':
             break
         else:
@@ -281,7 +318,6 @@ def minimum(table):
                 print("stock Masih Aman, Stock Akan Tampil Jika Ada Stock Dibawah 5")
                 continue
 
-                
         elif option_sub=='2':
             break
         else:
@@ -315,7 +351,7 @@ def main_menu():
     while True:
         print('''
     --------------------------------------------------------
-    APLIKASI GUDANG SPAREPART MAJU JAYA
+    APLIKASI GUDANG SPAREPART OTOMOTIF
 
     Main Menu List:
     1. Menampilkan Daftar Sparepart
